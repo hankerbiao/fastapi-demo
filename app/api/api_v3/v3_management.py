@@ -30,7 +30,6 @@ def batch_start(order: Optional[str], server_name: Optional[str]):
     """
     init = Init()
     res = init.batch(order, server_name)
-    print(res)
     return Response(code=0, msg='', data=res)
 
 
