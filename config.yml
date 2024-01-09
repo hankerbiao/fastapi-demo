@@ -1,0 +1,100 @@
+VERSION: 23.11.0.0
+PORT: 8000
+# Normally this file will not be changed
+
+component:
+  # 各个组件配置信息,路径均为相对路径
+  # head:  <组件名称>
+  #   script_path: <启动脚本路径>  启动脚本路径,相对于安装目录路径
+  #   directory_name: <目录名称>  显示脚本路径，找到启动脚本
+  #   process_name: <进程名称>  用于监控进程状态
+  grafana:
+    directory_name: "grafana-7.4.3"
+    script_path: "bin/run.sh"
+    port: 3000
+
+  emss-metric-exporters:
+    directory_name: "emss-metric-exporters"
+    script_path: "run.sh"
+    port: 8081
+
+  logstash:
+    directory_name: "logstash-8.7.0"
+    script_path: "bin/run.sh"
+    port: 9600
+
+  flink:
+    directory_name: "flink-1.17.1"
+    script_path: "bin/run.sh"
+    port: 8881
+
+  emss-server:
+    directory_name: "application"
+    script_path: "start-emss.sh"
+    port: 8080
+
+  org.h2.tools.Server:
+    directory_name: "application"
+    script_path: "start-emss.sh  h2"
+    port: 8085
+
+  kafka:
+    directory_name: "kafka_2.12-2.6.0"
+    script_path: "bin/run.sh"
+    port: 9092
+
+  nginx:
+    directory_name: "emss-web/nginx"
+    script_path: "sbin/run.sh"
+    process_name: "nginx"
+    port: 80
+
+  prometheus:
+    directory_name: "monitor/prometheus"
+    script_path: "run.sh"
+    process_name: "prometheus"
+    port: 9090
+
+  alertmanager:
+    directory_name: "monitor/alertmanager"
+    script_path: "run.sh"
+    process_name: "alertmanager"
+    port: 9093
+
+  pushgateway:
+    directory_name: "monitor/pushgateway"
+    script_path: "run.sh"
+    process_name: "pushgateway"
+    port: 9091
+
+  elasticsearch:
+    directory_name: "elasticsearch-7.6.2"
+    script_path: "bin/run.sh"
+    process_name: "elasticsearch"
+    port: 9200
+
+  apache-zookeeper:
+    directory_name: "apache-zookeeper-3.8.0-bin"
+    script_path: "bin/zkServer.sh"
+    process_name: "apache-zookeeper"
+    port: 2181
+    keep-alive: True
+
+
+start_script_path:
+  grafana: "bin/run.sh"
+  logstash: "bin/run.sh"
+  flink: "bin/run.sh"
+  emss-metric-exporters: "run.sh"
+  emss-server: "start-emss.sh"
+  org.h2.tools.Server: "start-emss.sh {} h2"
+  kafka: "bin/run.sh"
+  prometheus: "run.sh"
+  alertmanager: "run.sh"
+  nginx: "sbin/run.sh"
+  elasticsearch: "bin/run.sh"
+  apache-zookeeper: "bin/zkServer.sh"
+  pushgateway: "run.sh"
+
+
+configserver_path: "./configserver"
