@@ -1,11 +1,9 @@
-import traceback
 from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from util.config import GLOBAL_CONFIG
 from util.Logger import Logger
 from util.constants import *
-from util.utils import start_nginx
 from app.core.RPA.LinuxRPAUtils import LinuxRPA
 
 logger = Logger()
@@ -53,23 +51,21 @@ def create_app() -> FastAPI:
         # append_to_bash_profile(envs)
         logger.info("(2/6)初始化环境变量完成！")
         # 初始化server.conf
-        logger.info("(3/6)开始初始化server.conf...")
-        # first_upgrade = init_server_config()
-        # global_param.first_upgrade = first_upgrade
-        logger.info("(3/6)初始化server.conf完成！")
+        logger.info("(3/6)开始初始化配置文件...")
+        # todo
+        logger.info("(3/6)初始化配置文件完成！")
         # 初始化数据库
         logger.info("(4/6)开始初始化数据库...")
         # todo
         logger.info("(4/6)初始化数据库完成！")
         # 启动nginx
         logger.info("(5/6)开始启动nginx...")
-        start_nginx()
+        #todo
         logger.info("(5/6)启动nginx完成！")
         # 初始化部分配置文件
         logger.info("(6/6)开始初始化部分配置文件...")
         # todo
         logger.info("(6/6)初始化部分配置文件完成！")
-
         # 完成启动
         logger.info("服务启动完成！")
 

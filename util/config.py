@@ -72,7 +72,6 @@ class GLOBAL_CONFIG:
     def config_center_path(self):
         path = {
             "custom-installation-config.json": f"{self.configserver_path}/ConfigServer/installationConfig/custom-installation-config.json",
-            "custom-installation-config.json2": f"ConfigServer/installationConfig/custom-installation-config.json",
             "server.conf": f"{self.configserver_path}/server.conf",
             "server.conf_模板": f"{self.configserver_path}/server.conf_模板"
         }

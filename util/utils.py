@@ -1,41 +1,23 @@
 import os
-import re
 import shutil
 import tarfile
-import traceback
 
 from app.core.RPA.LinuxRPAUtils import LinuxRPA
 from util.Logger import Logger
 from app.core.RPA.Utils.Utils import cmd_linux
-from functools import lru_cache
 import socket
 from util.config import GLOBAL_CONFIG
-from util.constants import BACKUP_PATH, IP_PATTERN
+from util.constants import BACKUP_PATH
 
 rpa = LinuxRPA()
 global_param = GLOBAL_CONFIG()
 logger = Logger()
 
 
-def get_one_key_config(param: str = None):
-    """
-    读取全局配置文件server.conf文件，带参数返回对应的值，不带参数返回整个文件内容
-    :return:
-    """
-    server_conf_path = global_param.server_conf_path
-    if not os.path.exists(server_conf_path):
-        logger.info('server.conf文件不存在')
-        return ''
-
-    with open(server_conf_path, 'r', encoding='utf8') as f:
-        for line in f:
-            if line.lower().find(param.lower()) > -1:
-                param_name, result = line.split('=')
-                return result.replace("'", "").strip()
-    return ''
-
-
 def execute_rpa(path, order):
+    """
+    执行RPA命令
+    """
     shell_path = os.path.split(path)[0]
     execute_shell = os.path.split(path)[1]
     if execute_shell.find('start-emss.sh') > -1:
@@ -46,18 +28,6 @@ def execute_rpa(path, order):
     res.insert(0, f"执行命令：./{execute_shell} {order}")
     res.insert(0, f"shell_path：{shell_path}")
     return res
-
-
-@lru_cache()
-def get_h2_base():
-    ip = get_one_key_config("DB_HOST")
-    port = get_one_key_config("DB_PORT")
-    host = ip + ":" + port
-    db_username = get_one_key_config("DB_USERNAME")
-    db_password = get_one_key_config("DB_PASSWORD")
-    db_name = get_one_key_config("DB_DBNAME")
-
-    return host, db_username, db_password, db_name
 
 
 def is_port_open(port, ip='127.0.0.1'):
@@ -119,7 +89,6 @@ def append_to_bash_profile(content):
     # todo 配置文件生效
 
 
-
 # 启动nginx
 def start_nginx():
     nginx_path = os.path.join(global_param.install_path, "emss-web/nginx/sbin")
@@ -130,39 +99,3 @@ def start_nginx():
             logger.info(f"启动nginx成功！")
         else:
             logger.error(f"启动nginx失败！,请手动执行检查！")
-
-
-def init_server_config() -> bool:
-    old_configserver_path = os.path.join(global_param.install_path, "../configserver")
-    if os.path.exists(old_configserver_path):
-        logger.info("存在旧的configserver！")
-        new_configserver_path = os.path.join(global_param.work_path, "configserver")
-        if os.path.exists(new_configserver_path):
-            shutil.rmtree(new_configserver_path)
-        shutil.move(old_configserver_path, global_param.work_path)
-        logger.info("移动旧的configserver到工作目录下！")
-        global_param.first_upgrade = False
-        return False
-    else:
-        logger.info("不存在旧的configserver！")
-        # 初始化server_config配置
-        server_config_path = global_param.config_center_path.get("server.conf")
-        if not os.path.exists(server_config_path):
-            try:
-                shutil.copy(global_param.config_center_path.get("server.conf_模板"), server_config_path)
-                with open(server_config_path, "r") as f:
-                    server_config = f.read()
-                server_config = re.sub(IP_PATTERN, global_param.local_ip, server_config)
-                with open(server_config_path, "w") as f:
-                    # todo 是否需要赋予文件权限
-                    f.write(server_config)
-
-                logger.info(f"首次升级，生成{server_config_path}成功！")
-            except Exception as e:
-                logger.info(e)
-                logger.info(traceback.format_exc())
-                logger.error(traceback.format_exc())
-            return True
-        else:
-            logger.info(f"{server_config_path}已存在，不再重新生成！")
-            return False

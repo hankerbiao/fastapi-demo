@@ -1,6 +1,5 @@
-VERSION: 23.11.0.0
+VERSION: 1.0.0.0
 PORT: 8000
-# Normally this file will not be changed
 
 component:
   # 各个组件配置信息,路径均为相对路径
@@ -13,11 +12,6 @@ component:
     script_path: "bin/run.sh"
     port: 3000
 
-  emss-metric-exporters:
-    directory_name: "emss-metric-exporters"
-    script_path: "run.sh"
-    port: 8081
-
   logstash:
     directory_name: "logstash-8.7.0"
     script_path: "bin/run.sh"
@@ -27,11 +21,6 @@ component:
     directory_name: "flink-1.17.1"
     script_path: "bin/run.sh"
     port: 8881
-
-  emss-server:
-    directory_name: "application"
-    script_path: "start-emss.sh"
-    port: 8080
 
   org.h2.tools.Server:
     directory_name: "application"
@@ -81,20 +70,6 @@ component:
     keep-alive: True
 
 
-start_script_path:
-  grafana: "bin/run.sh"
-  logstash: "bin/run.sh"
-  flink: "bin/run.sh"
-  emss-metric-exporters: "run.sh"
-  emss-server: "start-emss.sh"
-  org.h2.tools.Server: "start-emss.sh {} h2"
-  kafka: "bin/run.sh"
-  prometheus: "run.sh"
-  alertmanager: "run.sh"
-  nginx: "sbin/run.sh"
-  elasticsearch: "bin/run.sh"
-  apache-zookeeper: "bin/zkServer.sh"
-  pushgateway: "run.sh"
 
 
 configserver_path: "./configserver"
