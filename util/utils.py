@@ -58,18 +58,7 @@ async def cmd_linux_async(cmd) -> List:
 class LinuxRPA:
     @classmethod
     def status(cls, process_name):
-        if process_name == 'prometheus':
-            order = "ps -ef | grep -w %s |grep -v grep |grep -v zookeeper-prometheus |grep -v EmssRPA.RPAUtils |awk " \
-                    "\'{print $1,$2}\'" % process_name
-        elif process_name == 'elasticsearch':
-            order = "ps -ef | grep -w %s |grep -v grep |grep -v flink |grep -v EmssRPA.RPAUtils |awk " \
-                    "\'{print $1,$2}\'" % process_name
-        elif process_name == "emss-server":
-            order = "ps aux | grep -w %s |grep -v grep |grep -v EmssRPA.RPAUtils |grep -v zookeeper-emss-server |awk \'{print $1,$2}\'" % process_name
-
-        else:
-            order = "ps aux | grep -w %s |grep -v grep |grep -v EmssRPA.RPAUtils |awk \'{print $1,$2}\'" % process_name
-
+		order = "ps aux | grep -w %s |grep -v grep |grep -v EmssRPA.RPAUtils |awk \'{print $1,$2}\'" % process_name
         process_info = cmd_linux(order)
         return 1 if process_info else 0
 

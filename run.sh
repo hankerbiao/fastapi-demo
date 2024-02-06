@@ -1,7 +1,7 @@
 #!/bin/bash
 
-PROGRAM_NAME="emss-manage"  # 程序名称
-PROGRAM_PATH="../python/bin/python3 run.py emss-manage"  # 启动命令
+PROGRAM_NAME="manage"  # 程序名称
+PROGRAM_PATH="../python/bin/python3 run.py manage"  # 启动命令
 PORT=22501
 
 # 检查程序状态

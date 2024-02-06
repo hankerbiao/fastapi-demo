@@ -22,8 +22,8 @@ os.environ["JAVA_HOME"] = fr"{global_param.install_path}/jdk-17.0.5"
 
 def create_app() -> FastAPI:
     app = FastAPI(
-        title="运维易配置中心",
-        description="运维易配置中心，管理开源组件的配置文件和启动控制",
+        title="配置中心",
+        description="配置中心，管理开源组件的配置文件和启动控制",
         version="1.0.0",
     )
     origins = [
