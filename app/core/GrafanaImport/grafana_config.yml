@@ -1,0 +1,7 @@
+url: http://172.20.0.96:3000/api/
+Authorization: Bearer eyJrIjoiZ0JhODVTQTJmTHhqNWVrenlEMzlWWUlJRkdsbUpyYTYiLCJuIjoiZmRnZGZnIiwiaWQiOjF9
+
+elasticsearch: http://172.20.1.168:9200
+prometheus: http://172.20.0.96:9090
+
+uid_list: []

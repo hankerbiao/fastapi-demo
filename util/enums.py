@@ -8,7 +8,7 @@ class StrEnum(str, Enum):
 
     def __str__(self):
         """
-        重写__str__方法，返回枚举值
+        重写__str__方法，使得当打印枚举实例时返回枚举值，而不是枚举名。
         """
         return self.value
 

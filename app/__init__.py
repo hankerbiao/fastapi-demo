@@ -3,14 +3,21 @@ from starlette.staticfiles import StaticFiles
 from starlette.middleware.cors import CORSMiddleware
 from util.config import GLOBAL_CONFIG
 from util.Logger import Logger
+import os
 from util.constants import *
-from app.core.RPA.LinuxRPAUtils import LinuxRPA
+from util.utils import (
+    extract_and_move_tar,
+    append_to_bash_profile,
+    init_database,
+    start_nginx, init_server_config
+)
 
 logger = Logger()
-rpa = LinuxRPA()
 global_param = GLOBAL_CONFIG()
 
 from app.api import router
+
+os.environ["JAVA_HOME"] = fr"{global_param.install_path}/jdk-17.0.5"
 
 
 def create_app() -> FastAPI:
@@ -21,7 +28,7 @@ def create_app() -> FastAPI:
     )
     origins = [
         "http://127.0.0.1",
-        f"http://127.0.0.1:{global_param.port}",
+        f"http://127.0.0.1:{global_param.server_port}",
         "http://127.0.0.1:3500",
     ]
 
@@ -36,37 +43,44 @@ def create_app() -> FastAPI:
     app.include_router(router, prefix='/api/console_v1')  # 增加路由
 
     @app.on_event("startup")
-    def startup():
+    async def startup():
         """
-        启动服务前做的配置
+        Configuration before starting the service.
         """
-        logger.info("准备启动服务...")
-        # 解压所有组件
-        logger.info("(1/6)开始解压tar包...")
-        # todo
-        logger.info("(1/6)解压tar包完成！")
-        # 初始化环境变量
-        logger.info("(2/6)开始初始化环境变量...")
+        logger.info("Preparing to start the service...")
+
+        # (1/6) Extract tar packages
+        logger.info("(1/6) Extracting tar packages...")
+        extract_and_move_tar()
+        logger.info("(1/6) Tar extraction completed!")
+
+        # (2/6) Initialize environment variables
+        logger.info("(2/6) Initializing environment variables...")
         envs = ENVS.format(global_param.install_path)
-        # append_to_bash_profile(envs)
-        logger.info("(2/6)初始化环境变量完成！")
-        # 初始化server.conf
-        logger.info("(3/6)开始初始化配置文件...")
-        # todo
-        logger.info("(3/6)初始化配置文件完成！")
-        # 初始化数据库
-        logger.info("(4/6)开始初始化数据库...")
-        # todo
-        logger.info("(4/6)初始化数据库完成！")
-        # 启动nginx
-        logger.info("(5/6)开始启动nginx...")
-        #todo
-        logger.info("(5/6)启动nginx完成！")
-        # 初始化部分配置文件
-        logger.info("(6/6)开始初始化部分配置文件...")
-        # todo
-        logger.info("(6/6)初始化部分配置文件完成！")
-        # 完成启动
-        logger.info("服务启动完成！")
+        append_to_bash_profile(envs)
+        logger.info("(2/6) Environment variables initialized!")
+
+        # (3/6) Initialize server.conf
+        logger.info("(3/6) Initializing server.conf...")
+        init_server_config()
+        logger.info("(3/6) server.conf initialized!")
+
+        # (4/6) Initialize the database
+        logger.info("(4/6) Initializing the database...")
+        init_database()
+        logger.info("(4/6) Database initialized!")
+
+        # (5/6) Start nginx
+        logger.info("(5/6) Starting nginx...")
+        start_nginx()
+        logger.info("(5/6) Nginx started!")
+
+        # (6/6) Initialize some configuration files
+        logger.info("(6/6) Initializing some configuration files...")
+        # todo: Add initialization logic for configuration files here
+        logger.info("(6/6) Configuration files initialized!")
+
+        # Service startup completed
+        logger.info("Service startup completed!")
 
     return app
