@@ -34,7 +34,6 @@ async def get_articles(
         if endDate:
             endDate = endDate.replace(tzinfo=timezone.utc)
             query = query.where(NewNews.editor_time <= endDate)
-        print(isFinanceOrEstate)
         if isFinanceOrEstate:
             query = query.where(NewNews.isFinanceOrEstate == 1)
 

@@ -4,7 +4,7 @@ from fastapi import Depends
 from sqlalchemy import create_engine
 from sqlmodel import Session, SQLModel
 
-engine = create_engine(r"sqlite:////Users/libiao/PycharmProjects/enorth/news.db")
+engine = create_engine(r"sqlite:///news.db")
 
 SQLModel.metadata.create_all(engine)
 
