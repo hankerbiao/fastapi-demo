@@ -4,8 +4,9 @@ from datetime import datetime, timezone
 from sqlalchemy.exc import SQLAlchemyError
 from sqlmodel import select, or_, func
 from app.api.deps import SessionDep
-from models import NewNews
 from pydantic import BaseModel
+
+from models.News import NewNews
 
 router = APIRouter()
 
